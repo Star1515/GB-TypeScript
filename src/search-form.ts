@@ -51,4 +51,8 @@ export function renderSearchFormBlock() {
     </form>
     `
   );
+
 }
+
+
+
