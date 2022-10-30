@@ -1,6 +1,7 @@
 import { renderBlock } from './lib.js';
+import { getFavoritesAmount } from './user.js'
 
-export function renderSearchStubBlock () {
+export function renderSearchStubBlock() {
   renderBlock(
     'search-results-block',
     `
@@ -12,7 +13,7 @@ export function renderSearchStubBlock () {
   );
 }
 
-export function renderEmptyOrErrorSearchBlock (reasonMessage) {
+export function renderEmptyOrErrorSearchBlock(reasonMessage) {
   renderBlock(
     'search-results-block',
     `
@@ -24,7 +25,28 @@ export function renderEmptyOrErrorSearchBlock (reasonMessage) {
   );
 }
 
-export function renderSearchResultsBlock () {
+const toggleFavoriteItem = (id) => {
+  const favoritesItem: string[] = getFavoritesList()
+  const findItem = favoritesItem.find(itemId => itemId === id)
+
+  if (findItem) {
+    const newFavoritesItems = favoritesItem.filter(itemId => itemId !== id)
+    localStorage.setItem('favoriteItems', newFavoritesItems.join())
+  } else {
+    localStorage.setItem('favoriteItems', [...favoritesItem, id].join())
+  }
+  getFavoritesAmount();
+}
+
+const getFavoritesList = () => {
+  return localStorage.getItem('favoriteItems').split(',');
+}
+
+const favoriteButton = document.querySelector('js-favoriteToggle')
+favoriteButton.addEventListener('click', toggleFavoriteItem)
+
+
+export function renderSearchResultsBlock() {
   renderBlock(
     'search-results-block',
     `
